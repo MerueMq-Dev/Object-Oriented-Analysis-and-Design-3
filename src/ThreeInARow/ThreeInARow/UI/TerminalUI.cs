@@ -6,7 +6,7 @@ using TuiApp = Terminal.Gui.Application;
 namespace ThreeInARow.UI;
 
 /// <summary>
-/// TUI интерфейс с использованием Terminal.Gui
+/// TUI интерфейс
 /// </summary>
 public class TerminalUI
 {
@@ -86,8 +86,7 @@ public class TerminalUI
         };
 
         menu.Add(titleLabel, startButton, leaderboardButton, exitButton, helpLabel);
-
-        // Горячие клавиши
+        
         menu.KeyPress += (e) =>
         {
             switch (e.KeyEvent.Key)
@@ -169,18 +168,16 @@ public class TerminalUI
             Width = Dim.Fill(),
             Height = Dim.Fill()
         };
-
-        // Область для отображения игрового поля
+        
         _boardView = new View()
         {
             X = 2,
             Y = 1,
             Width = 50,
             Height = 20,
-            CanFocus = true  // ВАЖНО: делаем фокусируемым!
+            CanFocus = true
         };
 
-        // Статус игры
         _statusLabel = new Label("Выберите первую клетку стрелками и нажмите Enter")
         {
             X = 2,
@@ -188,7 +185,6 @@ public class TerminalUI
             Width = Dim.Fill() - 2
         };
 
-        // Счёт
         _scoreLabel = new Label("")
         {
             X = 2,
@@ -196,7 +192,6 @@ public class TerminalUI
             Width = Dim.Fill() - 2
         };
 
-        // Легенда
         var legendLabel = new Label(
             "Элементы: R-красный, B-синий, G-зелёный\n" +
             "         Y-жёлтый, P-фиолетовый, O-оранжевый\n\n" +
@@ -213,13 +208,11 @@ public class TerminalUI
 
         _mainWindow.Add(_boardView, _statusLabel, _scoreLabel, legendLabel);
 
-        // ВАЖНО: Обработка клавиш на уровне _boardView, а не _mainWindow
         _boardView.KeyPress += HandleGameKeyPress;
 
         TuiApp.Top.RemoveAll();
         TuiApp.Top.Add(_mainWindow);
 
-        // ВАЖНО: Устанавливаем фокус на игровое поле
         _boardView.SetFocus();
 
         UpdateGameDisplay();
@@ -272,7 +265,6 @@ public class TerminalUI
 
             case Key.Tab:
             case Key.BackTab:
-                // Блокируем Tab - не даём фокусу уйти с игрового поля
                 e.Handled = true;
                 break;
 
@@ -289,14 +281,12 @@ public class TerminalUI
     {
         if (_selectedCell == null)
         {
-            // Первая клетка - запоминаем
             _selectedCell = (_cursorX, _cursorY);
             _statusLabel!.Text = $"Выбрана клетка ({_cursorX}, {_cursorY}). Выберите соседнюю клетку.";
             UpdateGameDisplay();
         }
         else
         {
-            // Вторая клетка - пытаемся сделать ход
             var (x1, y1) = _selectedCell.Value;
             var x2 = _cursorX;
             var y2 = _cursorY;
@@ -330,7 +320,6 @@ public class TerminalUI
 
             UpdateGameDisplay();
 
-            // ВАЖНО: Возвращаем фокус на игровое поле
             _boardView?.SetFocus();
         }
     }
@@ -342,10 +331,8 @@ public class TerminalUI
 
         if (board == null || session == null) return;
 
-        // Обновляем счёт
         _scoreLabel!.Text = $"Игрок: {session.GetPlayerName()} | Очки: {session.GetScore()}";
 
-        // Рисуем поле
         DrawBoard(board);
     }
 
@@ -359,7 +346,6 @@ public class TerminalUI
         int startX = 0;
         int startY = 0;
 
-        // Заголовок с номерами столбцов
         var header = "    0   1   2   3   4   5   6   7";
         var headerLabel = new Label(header)
         {
@@ -368,7 +354,6 @@ public class TerminalUI
         };
         _boardView.Add(headerLabel);
 
-        // Верхняя граница
         var topBorder = "  ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗";
         var topBorderLabel = new Label(topBorder)
         {
@@ -380,7 +365,6 @@ public class TerminalUI
         // Строки поля
         for (int y = 0; y < size; y++)
         {
-            // Строка с номером и элементами
             var rowText = $"{y} ║";
 
             for (int x = 0; x < size; x++)
@@ -388,18 +372,17 @@ public class TerminalUI
                 var element = board.GetElement(x, y);
                 var symbol = GetElementSymbol(element.GetType());
 
-                // Подсветка курсора и выбранной клетки
                 if (x == _cursorX && y == _cursorY)
                 {
-                    symbol = $"[{symbol}]"; // Курсор - квадратные скобки
+                    symbol = $"[{symbol}]";
                 }
                 else if (_selectedCell.HasValue && _selectedCell.Value.x == x && _selectedCell.Value.y == y)
                 {
-                    symbol = $"<{symbol}>"; // Выбранная клетка - угловые скобки
+                    symbol = $"<{symbol}>";
                 }
                 else
                 {
-                    symbol = $" {symbol} "; // Обычная клетка
+                    symbol = $" {symbol} ";
                 }
 
                 rowText += symbol + "║";
@@ -411,7 +394,6 @@ public class TerminalUI
                 Y = startY + 2 + y * 2
             };
 
-            // Цветовая схема для текущей строки с курсором
             if (y == _cursorY)
             {
                 rowLabel.ColorScheme = Colors.Menu;
@@ -419,7 +401,6 @@ public class TerminalUI
 
             _boardView.Add(rowLabel);
 
-            // Разделитель между строками
             if (y < size - 1)
             {
                 var separator = "  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣";
@@ -432,7 +413,6 @@ public class TerminalUI
             }
         }
 
-        // Нижняя граница
         var bottomBorder = "  ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝";
         var bottomBorderLabel = new Label(bottomBorder)
         {
@@ -498,23 +478,46 @@ public class TerminalUI
             Width = Dim.Fill() - 2,
             Height = Dim.Fill() - 4,
             Text = text,
-            ReadOnly = true
+            ReadOnly = true,
+            CanFocus = true
         };
 
-        var backButton = new Button("Вернуться в меню")
+        var helpLabel = new Label("Нажмите Q или Esc для возврата в меню")
         {
             X = Pos.Center(),
-            Y = Pos.Bottom(window) - 2
-        };
-        backButton.Clicked += () =>
-        {
-            TuiApp.RequestStop();
-            ShowMainMenu();
+            Y = Pos.Bottom(window) - 2,
+            ColorScheme = Colors.Base
         };
 
-        window.Add(textView, backButton);
+        void CloseLeaderboard()
+        {
+            _controller.ReturnToMenu();
+            ShowMainMenu();
+        }
+
+        textView.KeyPress += (e) =>
+        {
+            if (e.KeyEvent.Key == Key.Esc || e.KeyEvent.Key == Key.q || e.KeyEvent.Key == Key.Q)
+            {
+                CloseLeaderboard();
+                e.Handled = true;
+            }
+        };
+
+        window.KeyPress += (e) =>
+        {
+            if (e.KeyEvent.Key == Key.Esc || e.KeyEvent.Key == Key.q || e.KeyEvent.Key == Key.Q)
+            {
+                CloseLeaderboard();
+                e.Handled = true;
+            }
+        };
+
+        window.Add(textView, helpLabel);
 
         TuiApp.Top.RemoveAll();
         TuiApp.Top.Add(window);
+
+        textView.SetFocus();
     }
 }

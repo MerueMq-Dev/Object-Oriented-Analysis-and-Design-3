@@ -116,7 +116,7 @@ public class GameSession : IGameSession
 
     /// <summary>
     /// Команда: добавить очки
-    /// Ограничение: очки не могут быть отрицательными
+    /// Предусловие: очки не могут быть отрицательными
     /// </summary>
     public void AddScore(int value)
     {

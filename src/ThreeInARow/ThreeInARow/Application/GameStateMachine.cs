@@ -24,7 +24,7 @@ public class GameStateMachine : IGameStateMachine
 
     /// <summary>
     /// Команда: изменить состояние
-    /// Ограничение: можно переходить только между разрешёнными состояниями
+    /// Предусловие: можно переходить только между разрешёнными состояниями
     /// </summary>
     public bool ChangeState(GameState newState)
     {

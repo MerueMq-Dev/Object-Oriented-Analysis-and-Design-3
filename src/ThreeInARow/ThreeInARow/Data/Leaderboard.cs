@@ -46,7 +46,7 @@ public class Leaderboard : ILeaderboard
             Score = score,
             PlayedAt = DateTime.Now
         };
-
+        
         _results.Add(result);
     }
 }

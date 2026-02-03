@@ -1,5 +1,4 @@
-﻿using ThreeInARow.Application.;
-using ThreeInARow.Application.Abstractions;
+﻿using ThreeInARow.Application.Abstractions;
 using ThreeInARow.Core;
 using ThreeInARow.Data;
 
@@ -70,7 +69,7 @@ public class GameController : IGameController
 
     /// <summary>
     /// Команда: обработать ход игрока
-    /// Ограничение: ход можно обработать только в состоянии Playing
+    /// Предусловие: ход можно обработать только в состоянии Playing
     /// </summary>
     public MoveResult ProcessMove(int x1, int y1, int x2, int y2)
     {
@@ -80,21 +79,15 @@ public class GameController : IGameController
         if (_currentBoard == null || _currentSession == null)
             return MoveResult.InvalidState;
 
-        // Пробуем поменять элементы
         if (!_currentBoard.Swap(x1, y1, x2, y2))
             return MoveResult.InvalidMove;
 
-        // Проверяем, появились ли совпадения
         if (!_currentBoard.HasMatch())
         {
-            // ВАЖНО: Откатываем ход, если совпадений нет
-            // После этого состояние доски возвращается к исходному
             _currentBoard.Swap(x1, y1, x2, y2);
             return MoveResult.NoMatch;
         }
 
-        // Удаляем совпадения и начисляем очки
-        // RemoveMatches сразу заменяет удалённые элементы новыми
         int removedCount = _currentBoard.RemoveMatches();
         int points = CalculatePoints(removedCount);
         _currentSession.AddScore(points);
@@ -141,7 +134,6 @@ public class GameController : IGameController
 
     private int CalculatePoints(int matchCount)
     {
-        // Базовые очки: 10 за каждый удалённый элемент
         return matchCount * 10;
     }
 }

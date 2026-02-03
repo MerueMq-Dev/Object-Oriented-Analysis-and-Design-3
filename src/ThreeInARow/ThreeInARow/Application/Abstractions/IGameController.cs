@@ -12,26 +12,26 @@ namespace ThreeInARow.Application.Abstractions;
 ///   Обрабатывает действия пользователя и обеспечивает корректность процесса
 /// 
 /// ЗАПРОСЫ:
-///   GetCurrentState() -> GameState
+///   GetCurrentState() : GameState
 ///     Возвращает текущее состояние игры
 ///     Постусловие: возвращаемое значение соответствует состоянию машины состояний
 ///     
-///   GetCurrentBoard() -> GameBoard?
+///   GetCurrentBoard() : GameBoard?
 ///     Возвращает игровое поле активной партии
 ///     Постусловие: возвращает объект поля если GetCurrentState() = Playing
 ///     Постусловие: возвращает null в остальных состояниях
 ///     
-///   GetCurrentSession() -> GameSession?
+///   GetCurrentSession() : GameSession?
 ///     Возвращает текущую игровую сессию
 ///     Постусловие: возвращает объект сессии если GetCurrentState() ∈ {Playing, Finished}
 ///     Постусловие: возвращает null в остальных состояниях
 ///     
-///   GetLeaderboard() -> Leaderboard
+///   GetLeaderboard() : Leaderboard
 ///     Возвращает таблицу лидеров
 ///     Постусловие: всегда возвращает определённый объект таблицы
 ///     
 /// КОМАНДЫ:
-///   StartGame(playerName: string) -> bool
+///   StartGame(playerName: string) : bool
 ///     Инициирует новую игровую партию
 ///     Предусловие: playerName является непустой строкой
 ///     Постусловие: при успехе GetCurrentState() возвращает Playing
@@ -39,7 +39,7 @@ namespace ThreeInARow.Application.Abstractions;
 ///     Постусловие: при успехе GetCurrentSession() возвращает новую сессию с нулевым счётом
 ///     Постусловие: возвращает true при успешном переходе в состояние Playing
 ///     
-///   ProcessMove(x1: int, y1: int, x2: int, y2: int) -> MoveResult
+///   ProcessMove(x1: int, y1: int, x2: int, y2: int) : MoveResult
 ///     Обрабатывает ход игрока путём обмена двух элементов
 ///     Предусловие: GetCurrentState() возвращает Playing
 ///     Предусловие: координаты находятся в пределах игрового поля
@@ -48,18 +48,18 @@ namespace ThreeInARow.Application.Abstractions;
 ///     Постусловие: при результате InvalidMove состояние поля не изменяется
 ///     Постусловие: счёт изменяется только при результате Success
 ///     
-///   EndGame() -> bool
+///   EndGame() : bool
 ///     Завершает текущую партию и сохраняет результат
 ///     Предусловие: GetCurrentState() возвращает Playing
 ///     Постусловие: при успехе GetCurrentState() возвращает Finished
 ///     Постусловие: при успехе результат добавлен в GetLeaderboard()
 ///     Постусловие: при успехе GetCurrentSession().IsFinished() возвращает true
 ///     
-///   ReturnToMenu() -> bool
+///   ReturnToMenu() : bool
 ///     Осуществляет переход в главное меню
 ///     Постусловие: при успехе GetCurrentState() возвращает Menu
 ///     
-///   ShowLeaderboard() -> bool
+///   ShowLeaderboard() : bool
 ///     Осуществляет переход к просмотру таблицы лидеров
 ///     Постусловие: при успехе GetCurrentState() возвращает Leaderboard
 ///     
