@@ -1,9 +1,11 @@
-﻿namespace ThreeInARow.Application;
+﻿using ThreeInARow.Application.Abstractions;
+
+namespace ThreeInARow.Application;
 
 /// <summary>
 /// Управляет состояниями игры
 /// </summary>
-public class GameStateMachine
+public class GameStateMachine : IGameStateMachine
 {
     private GameState _currentState;
 

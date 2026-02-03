@@ -1,9 +1,11 @@
-﻿namespace ThreeInARow.Core;
+﻿using ThreeInARow.Core.Abstractions;
+
+namespace ThreeInARow.Core;
 
 /// <summary>
 /// Представляет одну игровую партию
 /// </summary>
-public class GameSession
+public class GameSession : IGameSession
 {
     private int _score;
     private bool _isFinished;

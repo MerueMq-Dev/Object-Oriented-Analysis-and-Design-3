@@ -1,9 +1,11 @@
-﻿namespace ThreeInARow.Data;
+﻿using ThreeInARow.Data.Abstractions;
+
+namespace ThreeInARow.Data;
 
 /// <summary>
 /// Таблица лидеров с результатами игроков
 /// </summary>
-public class Leaderboard
+public class Leaderboard : ILeaderboard
 {
     private readonly List<GameResult> _results;
 

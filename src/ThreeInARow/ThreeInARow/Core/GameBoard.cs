@@ -1,9 +1,11 @@
-﻿namespace ThreeInARow.Core;
+﻿using ThreeInARow.Core.Abstractions;
+
+namespace ThreeInARow.Core;
 
 /// <summary>
 /// Игровое поле 8x8 с элементами
 /// </summary>
-public class GameBoard
+public class GameBoard : IGameBoard
 {
     private const int BoardSize = 8;
     private readonly GameElement[,] _board;

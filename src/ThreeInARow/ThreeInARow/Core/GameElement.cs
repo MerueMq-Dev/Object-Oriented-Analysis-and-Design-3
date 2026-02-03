@@ -1,10 +1,12 @@
-﻿namespace ThreeInARow.Core;
+﻿using ThreeInARow.Core.Abstractions;
+
+namespace ThreeInARow.Core;
 
 
 /// <summary>
 /// Представляет элемент на игровом поле
 /// </summary>
-public class GameElement
+public class GameElement : IGameElement
 {
     public ElementType Type { get; private set; }
 

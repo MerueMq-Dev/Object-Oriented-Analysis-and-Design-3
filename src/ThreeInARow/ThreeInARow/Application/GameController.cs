@@ -1,4 +1,6 @@
-﻿using ThreeInARow.Core;
+﻿using ThreeInARow.Application.;
+using ThreeInARow.Application.Abstractions;
+using ThreeInARow.Core;
 using ThreeInARow.Data;
 
 namespace ThreeInARow.Application;
@@ -6,7 +8,7 @@ namespace ThreeInARow.Application;
 /// <summary>
 /// Главный контроллер игры, управляет игровым процессом
 /// </summary>
-public class GameController
+public class GameController : IGameController
 {
     private readonly GameStateMachine _stateMachine;
     private readonly Leaderboard _leaderboard;
